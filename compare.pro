@@ -21,7 +21,7 @@ totalsimerr=sqrt(unptotalerr^2+ptotalerr^2)
 
 number=n_elements(flist)
 
-@apodise
+@apodise.pro
 
 ; real
 realratio=make_array(n,n)

@@ -23,8 +23,8 @@ atm=condition[c]           ; specify the atmospheric conditions of the data
 altitude=30000        ; specify the altitude at which to consider data
 savename=altitude     ; useful later if saving is enabled
 
-p=8 ; p is the index number for MINOR
-q=1 ; q is the index number for MAJOR
+p=0 ; p is the index number for MINOR
+q=0 ; q is the index number for MAJOR
 
 loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
 
