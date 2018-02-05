@@ -2,7 +2,7 @@
 
 cd, '/home/ball4321/MPhysProject'
 
-restore, '../rfm/ratioday30km'
+restore, 'rfm/ratioday30km'
 restore, 'jan04averaged'
 
 ;specnum=n_elements(flist)
@@ -34,7 +34,7 @@ endfor
 ; ACE-FTS, MIPAS, google isotopic
 ; journals: ACP JGR AMT
 ; make wavenumber axis starting at 0 going in 0.025
-; look at HDO
+; look at D2O
 
 deltareal=1000*(realratio-unpratio[*,*,0])/(unpratio[*,*,0])
 
