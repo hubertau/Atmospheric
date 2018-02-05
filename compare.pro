@@ -21,12 +21,15 @@ totalsimerr=sqrt(unptotalerr^2+ptotalerr^2)
 
 number=n_elements(flist)
 
+@apodise
+
 ; real
-realratio=make_array(10,10)
-totalrealerr=make_array(10,10)
+realratio=make_array(n,n)
+totalrealerr=make_array(n,n)
 for z=0, n-1 do begin
   for y=0, n-1 do begin
-    realratio[z,y]=avgreal1(mincoll[0,y])/avgreal1(majcoll[0,z])
+;    realratio[z,y]=avgreal1(mincoll[0,y])/avgreal1(majcoll[0,z])
+    realratio[z,y]=newapodise(1,mincoll[0,y]+27400)/newapodise(1,majcoll[0,z]+27400)
     totalrealerr[z,y]=sqrt((stdreal1(mincoll[0,y])/(avgreal1(mincoll[0,y])*sqrt(number)))^2+(stdreal1(majcoll[0,z])/(avgreal1(mincoll[0,y])*sqrt(n)))^2)
   endfor
 endfor

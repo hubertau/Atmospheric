@@ -79,9 +79,9 @@ data=data[indices[1,*],*]
 avgreal=mean(data,dimension=1)
 stdreal=STDDEV(data,dimension=1)
 !P.MULTI=[0,1,2]
-wnospc1=wnospc(600:4600)
-avgreal1=avgreal(600:4600)
-stdreal1=stdreal(600:4600)
+wnospc1=wnospc(0:11400)
+avgreal1=avgreal(0:11400)
+stdreal1=stdreal(0:11400)
 PLOT, wnospc1, avgreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Averaged Radiance at 15km, 30-50 deg latitude'
 PLOT, wnospc1, stdreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Standard Deviation of Average at 15km, 30-50 deg latitude'
 write_png, 'avg30km', TVRD(/true)

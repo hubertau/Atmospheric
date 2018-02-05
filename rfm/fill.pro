@@ -1,4 +1,4 @@
-pro Fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, condition, unpratio, pratio, unprdmerr, prdmerr
+pro Fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, condition, unpratio, pratio, unprdmerr, prdmerr, pr
 
 ;restore, 'ratioday30km'
 

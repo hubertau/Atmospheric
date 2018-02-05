@@ -25,5 +25,3 @@ for i=2, n_elements(apodise(2,*))-3 do begin
     + 0.2385*apodise(2,i+1) $
     + 0.0098*apodise(2,i+2)
 endfor
-
-end
