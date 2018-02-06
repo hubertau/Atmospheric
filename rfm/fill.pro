@@ -1,17 +1,16 @@
 pro Fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, condition, unpratio, pratio, unprdmerr, prdmerr, pr
 
-;restore, 'ratioday30km'
-
 for a=0, n_elements(condition)-1 do begin
-;  LoadData, condition[a], savename, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
+  ; Need LoadData to give different atmospheric condition data
+  LoadData, condition[a], savename, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
   minpeaks=minoryr(p,mincoll[0,*])
   majpeaks=majoryr(q,majcoll[0,*])
   
-  for z=0, n-1 do begin
-    for y=0, n-1 do begin
-      contrast[z,y,a]=minpeaks[y]/majpeaks[z]
-    endfor
-  endfor
+;  for z=0, n-1 do begin
+;    for y=0, n-1 do begin
+;      contrast[z,y,a]=minpeaks[y]/majpeaks[z]
+;    endfor
+;  endfor
   
   for z=0, n-1 do begin
     for y=0, n-1 do begin
@@ -29,30 +28,6 @@ for a=0, n_elements(condition)-1 do begin
     endfor
   endfor
   
-  
-  
 endfor
-
-
-
-;dev=stddev(mag,dimension=2)
-
-;for a=0, n_elements(condition)-1 do begin
-;  
-;  tempdev=make_array(10,10)
-;  for z=0, 9 do begin
-;    for y=0, 9 do begin
-;      minpeaks=dev(*,0)/minpeaks
-;      majpeaks=dev(*,1)/majpeaks
-;      tempdev[z,y]=minpeaks[y]+majpeaks[z]
-;    endfor
-;  endfor
-;  
-;  reldev[*,*,a]=tempdev
-;
-;endfor
-
-
-  
 
 end
