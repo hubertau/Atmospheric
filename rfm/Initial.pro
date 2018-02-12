@@ -13,6 +13,9 @@
 ; pratio are are the perturbed ratios: the ratios between the identified peaks (major to minor) in the perturbed spectrum
 ; unprdmerr and rdmerr are the random errors (assuming an error of 30), with only 1 real spectrum averaged.
 
+;#################################################################################################
+; change to correct directory and set up relevant atmospheric conditions and gas choice.
+
 CD, '/home/ball4321/MPhysProject/rfm'
 
 condition=['day','ngt','sum', 'win', 'equ']
@@ -23,6 +26,13 @@ savename=altitude     ; useful later if saving is enabled
 
 p=0 ; p is the index number for MINOR
 q=0 ; q is the index number for MAJOR
+
+;#################################################################################################
+
+
+;#################################################################################################
+; First task: load in data using the conditions specified above. This is done by calling loaddata,
+; and setting n conditionally on the number of peaks found.
 
 ; load data in from rfm outputs
 loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
@@ -46,6 +56,14 @@ endelse
 ; collate will collect the top n peaks sensitive to minor and major 
 collate, mincoll, minpeakno, p, minpeakindex, minoryr, w, n
 collate, majcoll, majpeakno, q, majpeakindex, majoryr, w, n
+
+;#################################################################################################
+
+
+;#################################################################################################
+; Next: calculate the relevant ratios and their relative errors. This is the ratios between lines
+; sensitive to minor isotopic change to major isotopic change, for both unperturbed and perturbed cases.
+; One more call is made to loaddata using default settings to ensure passing the right arrays to saving
 
 ;base30=make_array(n,n)
 ;for a=0, n-1 do begin
@@ -95,6 +113,9 @@ ratiostat, unpratio, pratio, avgsim, stdsim
 ;totalerr=sqrt(unptotalerr^2+ptotalerr^2)
 ;
 ;; plot,specnum, 1/(totalerr),xtitle='number of real spectra averaged', ytitle='signal-to-noise ratio'
+
+;#################################################################################################
+
 
 name='ratioday30km'
 save, filename=name, n, mincoll, majcoll, minoryr, majoryr, w, r, pratio, unpratio, avgsim, stdsim, prdmerr, unprdmerr, pr

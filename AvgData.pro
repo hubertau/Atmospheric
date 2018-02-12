@@ -4,6 +4,13 @@
 ;!p.background=CGCOLOR('white')
 ;!p.color=CGCOLOR('black')
 
+;#################################################################################################
+; set working and search directory. Also create relevant arrays to contain data to be read.
+; 'data' will contain the actual radiances. 59605 because that's how many data points are in the
+;   MIPAS bands from 685-2410 wavenumbers.
+; 'indices' will store information about what each spectrum in 'data' corresponds to: what altitude,
+;   latitude, etc.
+
 cd, '/home/ball4321/MPhysProject'
 
 ; First create list of files on date 16/01/2004.
@@ -16,6 +23,12 @@ data=MAKE_ARRAY(n_elements(flist)*73,59605)
 
 ; indices is going to collect information about what each spectrum in 'data' corresponds to.
 indices=MAKE_ARRAY(5,n_elements(flist)*73)
+
+;#################################################################################################
+
+
+;#################################################################################################
+; begin the loop to read in data. flist contains all the files to read through, so loop through that.
 
 for a=0,(n_elements(flist)-1) do begin
   L1BFIL=flist[a]
@@ -51,7 +64,7 @@ for a=0,(n_elements(flist)-1) do begin
     
     ; ISWEEP is now the absolute sweep# from the start of the file
     ;
-    ; Read spectrum from 14th sweep in selected scan (nominally ~15km) into
+    ; Read spectrum from 9th sweep in selected scan (nominally ~30km) into
     ; structure MDS
     L1B_MDS, LUN, ISWEEP+8, SPH, MDS
     
@@ -73,17 +86,21 @@ for a=0,(n_elements(flist)-1) do begin
 
 endfor
 
+;#################################################################################################
+
+
 ; Plot spectrum
-indices=indices(*,where(indices[0,*]))
-data=data[indices[1,*],*]
+x=where(indices[0,*])
+indices=indices(*,x) ; get rid of the rows that are 0. the where function returns indices of nonzero elements
+data=data[x,*] ; get rid of zero entries in data as well.
 avgreal=mean(data,dimension=1)
 stdreal=STDDEV(data,dimension=1)
 !P.MULTI=[0,1,2]
 wnospc1=wnospc(0:11400)
 avgreal1=avgreal(0:11400)
 stdreal1=stdreal(0:11400)
-PLOT, wnospc1, avgreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Averaged Radiance at 15km, 30-50 deg latitude'
-PLOT, wnospc1, stdreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Standard Deviation of Average at 15km, 30-50 deg latitude'
+PLOT, wnospc1, avgreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Averaged Radiance at 30km, 30-50 deg latitude'
+PLOT, wnospc1, stdreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Standard Deviation of Average at 30km, 30-50 deg latitude'
 ;write_png, 'avg30km', TVRD(/true)
 
 save, flist, avgreal, stdreal, indices, data, wnospc, avgreal1, stdreal1, wnospc1, filename='jan04averaged'

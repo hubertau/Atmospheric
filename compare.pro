@@ -1,6 +1,6 @@
 ; compare real and simulated data
 
-;###########################################################################
+;#################################################################################################
 ; set the directory and load in simulated and real data
 
 cd, '/home/ball4321/MPhysProject'
@@ -8,31 +8,37 @@ cd, '/home/ball4321/MPhysProject'
 restore, 'rfm/ratioday30km' ; simulated data
 restore, 'jan04averaged'    ; measured data
 
-;############################################################################
+;pratio=pratio[*,*,0]
+;unpratio=unpratio[*,*,0]
+
+pratio=mean(pratio,dimension=3)
+unpratio=mean(unpratio,dimension=3)
+
+;#################################################################################################
 
 
-;############################################################################
+;#################################################################################################
 ; simulated errors
 
 ; number of spectral lines averaged over
-specnum=n_elements(flist)
+specnum=n_elements(data(*,0))
 
 ; calculate relative error for unperturbed ratio
-unptotalerr=sqrt((stdsim[*,*,0]/unpratio[*,*,0])^2 $ 
+unptotalerr=sqrt((stdsim[*,*,0]/unpratio)^2 $ 
   +unprdmerr[*,*,0]^2/specnum)
 
 ; calculate relative error for the perturbed ratio
-ptotalerr=sqrt((stdsim[*,*,1]/pratio[*,*,0])^2 $
+ptotalerr=sqrt((stdsim[*,*,1]/pratio)^2 $
   +prdmerr[*,*,0]^2/specnum)
 
-;############################################################################
+;#################################################################################################
 
 
-;############################################################################
+;#################################################################################################
 ; measured data errors
 
 ; set variable 'number' to divide the standard deviation through by.
-number=n_elements(flist)
+number=specnum
 
 ; run apodisation script. This is smoothing of the data
 @apodise.pro
@@ -50,27 +56,27 @@ for z=0, n-1 do begin
   endfor
 endfor
 
-;############################################################################
+;#################################################################################################
 
 
-;############################################################################
+;#################################################################################################
 ; calcalate estimate for delta
 
-delta=20*(realratio-unpratio[*,*,0])/(pratio[*,*,0]-unpratio[*,*,0])
+delta=20*(realratio-unpratio)/(pratio-unpratio)
 
 ; calculate error for delta estimate
 ; get absolute errors
-abs1=sqrt((realratio*totalrealerr)^2+(unpratio[*,*,0]*unptotalerr)^2)
-abs2=sqrt((pratio[*,*,0]*ptotalerr)^2+(unpratio[*,*,0]*unptotalerr)^2)
+abs1=sqrt((realratio*totalrealerr)^2+(unpratio*unptotalerr)^2)
+abs2=sqrt((pratio*ptotalerr)^2+(unpratio*unptotalerr)^2)
 
 ; to then relative errors to propagate through
-rel1=abs1/(realratio-unpratio[*,*,0])
-rel2=abs2/(pratio[*,*,0]-unpratio[*,*,0])
+rel1=abs1/(realratio-unpratio)
+rel2=abs2/(pratio-unpratio)
 
 ; then propagate
 deltaerr=sqrt(rel1^2+rel2^2)
 
-;############################################################################
+;#################################################################################################
 
 delvar, y, z
 
