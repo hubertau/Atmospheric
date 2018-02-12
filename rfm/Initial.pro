@@ -79,22 +79,22 @@ prdmerr=make_array(n,n,n_elements(condition))    ; perturbed random errors
 
 avgsim=make_array(n,n,2) ; this will contain the ratios, averaged over atmospheric conditions
 stdsim=make_array(n,n,2) ; the standard deviation of the ratios, over different atmospheric conditions
+varsim=make_array(n,n,2) ; the variance of the ratios, over different atmospheric conditions
+
 
 ; fill.pro will fill in the ratios for different atmospheric conditions
 ; unprdmerr and prdmerr are output as RELATIVE errors
-fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, condition, unpratio, pratio, unprdmerr, prdmerr, pr
+fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, condition, unpratio, pratio, pr
 
 ; rerun of loaddata with day conditions to pass on to save.
 loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
 
 ; calculate average ratios and standard deviations for these ratios over different atmospheric conditions.
-ratiostat, unpratio, pratio, avgsim, stdsim
+ratiostat, unpratio, pratio, avgsim, stdsim, varsim, cov
 
 ;row=0 ; which ratio?
 ;column=0
-
 ;specnum=indgen(100000,start=1,/float) ; to generate the x-axis for plot - we want to plot against number of real spectra to be averaged over
-
 ;; work out percentage change and error in perentage change. Divide by two to get percentage change per 1% isotopic concentration change.
 ;pchange=50*(pratio[*,*,0]-unpratio[*,*,0])/(unpratio[*,*,0])
 ;
@@ -118,7 +118,7 @@ ratiostat, unpratio, pratio, avgsim, stdsim
 
 
 name='ratioday30km'
-save, filename=name, n, mincoll, majcoll, minoryr, majoryr, w, r, pratio, unpratio, avgsim, stdsim, prdmerr, unprdmerr, pr
+save, filename=name, n, mincoll, majcoll, minoryr, majoryr, w, r, pratio, unpratio, avgsim, stdsim, pr, varsim, cov
 
 delvar, a, b
 

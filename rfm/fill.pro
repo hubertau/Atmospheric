@@ -1,4 +1,4 @@
-pro Fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, condition, unpratio, pratio, unprdmerr, prdmerr, pr
+pro Fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, condition, unpratio, pratio, pr
 
 for a=0, n_elements(condition)-1 do begin
   ; Need LoadData to give different atmospheric condition data
@@ -15,7 +15,7 @@ for a=0, n_elements(condition)-1 do begin
   for z=0, n-1 do begin
     for y=0, n-1 do begin
       unpratio[z,y,a]=r(mincoll[0,y])/r(majcoll[0,z])
-      unprdmerr[z,y,a]=sqrt((30/r(mincoll[0,y]))^2+(30/r(majcoll[0,z]))^2)
+;      unprdmerr[z,y,a]=sqrt((30/r(mincoll[0,y]))^2+(30/r(majcoll[0,z]))^2)
     endfor
   endfor
   
@@ -24,7 +24,7 @@ for a=0, n_elements(condition)-1 do begin
   for z=0, n-1 do begin
     for y=0, n-1 do begin
       pratio[z,y,a]=pr(mincoll[0,y])/pr(majcoll[0,z])
-      prdmerr[z,y,a]=sqrt((30/pr(mincoll[0,y]))^2+(30/pr(majcoll[0,z]))^2)
+;      prdmerr[z,y,a]=sqrt((30/pr(mincoll[0,y]))^2+(30/pr(majcoll[0,z]))^2)
     endfor
   endfor
   

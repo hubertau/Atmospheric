@@ -8,11 +8,11 @@ cd, '/home/ball4321/MPhysProject'
 restore, 'rfm/ratioday30km' ; simulated data
 restore, 'jan04averaged'    ; measured data
 
-;pratio=pratio[*,*,0]
-;unpratio=unpratio[*,*,0]
+pratio=pratio[*,*,0]
+unpratio=unpratio[*,*,0]
 
-pratio=mean(pratio,dimension=3)
-unpratio=mean(unpratio,dimension=3)
+;pratio=mean(pratio,dimension=3)
+;unpratio=mean(unpratio,dimension=3)
 
 ;#################################################################################################
 
@@ -38,7 +38,7 @@ ptotalerr=sqrt((stdsim[*,*,1]/pratio)^2 $
 ; measured data errors
 
 ; set variable 'number' to divide the standard deviation through by.
-number=specnum
+number=n_elements(data(*,0))
 
 ; run apodisation script. This is smoothing of the data
 @apodise.pro
