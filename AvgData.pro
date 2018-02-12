@@ -95,6 +95,7 @@ indices=indices(*,x) ; get rid of the rows that are 0. the where function return
 data=data[x,*] ; get rid of zero entries in data as well.
 avgreal=mean(data,dimension=1)
 stdreal=STDDEV(data,dimension=1)
+varreal=variance(data,dimension=1)
 !P.MULTI=[0,1,2]
 wnospc1=wnospc(0:11400)
 avgreal1=avgreal(0:11400)
@@ -103,6 +104,6 @@ PLOT, wnospc1, avgreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 
 PLOT, wnospc1, stdreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Standard Deviation of Average at 30km, 30-50 deg latitude'
 ;write_png, 'avg30km', TVRD(/true)
 
-save, flist, avgreal, stdreal, indices, data, wnospc, avgreal1, stdreal1, wnospc1, filename='jan04averaged'
+save, flist, avgreal, stdreal, indices, data, wnospc, avgreal1, stdreal1, varreal, wnospc1, filename='jan04averaged'
 
 end

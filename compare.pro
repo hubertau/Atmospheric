@@ -18,23 +18,6 @@ unpratio=unpratio[*,*,0]
 
 
 ;#################################################################################################
-; simulated errors
-
-; number of spectral lines averaged over
-specnum=n_elements(data(*,0))
-
-; calculate relative error for unperturbed ratio
-unptotalerr=sqrt((stdsim[*,*,0]/unpratio)^2 $ 
-  +unprdmerr[*,*,0]^2/specnum)
-
-; calculate relative error for the perturbed ratio
-ptotalerr=sqrt((stdsim[*,*,1]/pratio)^2 $
-  +prdmerr[*,*,0]^2/specnum)
-
-;#################################################################################################
-
-
-;#################################################################################################
 ; measured data errors
 
 ; set variable 'number' to divide the standard deviation through by.
@@ -45,14 +28,14 @@ number=n_elements(data(*,0))
 
 ; create arrays to contain necessary data
 realratio=make_array(n,n)
-totalrealerr=make_array(n,n)
+realvar=make_array(n,n)
 
 ; fill the arrays
 for z=0, n-1 do begin
   for y=0, n-1 do begin
     realratio[z,y]=newapodise(1,mincoll[0,y]+27400)/newapodise(1,majcoll[0,z]+27400)
-    totalrealerr[z,y]=sqrt((stdreal1(mincoll[0,y])/(newapodise(1,mincoll[0,y]+27400)*sqrt(number)))^2 $
-      +(stdreal1(majcoll[0,z])/(newapodise(1,majcoll[0,z]+27400)*sqrt(number)))^2)
+    realvar[z,y]=varreal(mincoll[0,y])/number+varreal(majcoll[0,z])/number
+;    totalrealerr[z,y]=sqrt((stdreal1(mincoll[0,y])/(newapodise(1,mincoll[0,y]+27400)*sqrt(number)))^2 + (stdreal1(majcoll[0,z])/(newapodise(1,majcoll[0,z]+27400)*sqrt(number)))^2)
   endfor
 endfor
 
@@ -60,21 +43,44 @@ endfor
 
 
 ;#################################################################################################
-; calcalate estimate for delta
+; prepare derivatives for the delta variance calculation.
+
+; derivative for measured ratios
+dm=20/(realratio-unpratio)
+
+; derivative for unperturbed ratios
+d0=20*(realratio-pratio)/((pratio-unpratio)^2)
+
+; derivative for perturbed ratios
+dp=20*(unpratio-realratio)/((pratio-unpratio)^2)
+
+;#################################################################################################
+
+
+;#################################################################################################
+; prepare terms for final addition
+
+; term for measured variance
+err1=dm^2*realvar
+
+; term for unperturbed variance
+err2=d0^2*varsim[*,*,0]
+
+; term for perturbed variance
+err3=dp^2*varsim[*,*,1]
+
+; term for perturbed-unperturbed covariance
+err4=dp*d0*cov
+
+;#################################################################################################
+
+
+;#################################################################################################
+; calcalate estimate for delta, and its error
 
 delta=20*(realratio-unpratio)/(pratio-unpratio)
 
-; calculate error for delta estimate
-; get absolute errors
-abs1=sqrt((realratio*totalrealerr)^2+(unpratio*unptotalerr)^2)
-abs2=sqrt((pratio*ptotalerr)^2+(unpratio*unptotalerr)^2)
-
-; to then relative errors to propagate through
-rel1=abs1/(realratio-unpratio)
-rel2=abs2/(pratio-unpratio)
-
-; then propagate
-deltaerr=sqrt(rel1^2+rel2^2)
+deltavar=err1+err2+err3+err4
 
 ;#################################################################################################
 
