@@ -84,16 +84,7 @@ avgreal1=avgreal(0:11400)
 stdreal1=stdreal(0:11400)
 PLOT, wnospc1, avgreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Averaged Radiance at 15km, 30-50 deg latitude'
 PLOT, wnospc1, stdreal1, /ylog, XTITLE='Wavenumber, cm^-1', YTITLE='Radiance at 30km, nW/(cm2 sr cm-1)', TITLE='Standard Deviation of Average at 15km, 30-50 deg latitude'
-write_png, 'avg30km', TVRD(/true)
-
-;restore, '../rfm/ratioday30km'
-;
-;ratio=make_array(10,10)
-;for z=0, 10-1 do begin
-;  for y=0, 10-1 do begin
-;    ratio[z,y]=avgreal1(mincoll[0,y])/avgreal1(majcoll[0,z])
-;  endfor
-;endfor
+;write_png, 'avg30km', TVRD(/true)
 
 save, flist, avgreal, stdreal, indices, data, wnospc, avgreal1, stdreal1, wnospc1, filename='jan04averaged'
 

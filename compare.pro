@@ -12,16 +12,16 @@ restore, 'jan04averaged'    ; measured data
 
 
 ;############################################################################
-; simulated errorss
+; simulated errors
 
 ; number of spectral lines averaged over
 specnum=n_elements(flist)
 
-; calculate error for unperturbed ratio
+; calculate relative error for unperturbed ratio
 unptotalerr=sqrt((stdsim[*,*,0]/unpratio[*,*,0])^2 $ 
   +unprdmerr[*,*,0]^2/specnum)
 
-; calculate error for the perturbed ratio
+; calculate relative error for the perturbed ratio
 ptotalerr=sqrt((stdsim[*,*,1]/pratio[*,*,0])^2 $
   +prdmerr[*,*,0]^2/specnum)
 
