@@ -1,18 +1,35 @@
 ; use script to generate apodisable real data
 
 length=96401
-apodise=make_array(3,length)
+;apodise columns:
+; 0-new spectrum wavenumbers
+; 1-old spectrum wavenumbers
+; 2-old spectrum radiances
+; 3-old spectrum radiance variances 
+apodise=make_array(4,length)
 apodise(0,*)=indgen(length,/double)*0.025
 
 for i=0,n_elements(wnospc)-1 do begin
   x=where(abs(apodise(0,*)-wnospc(i)) lt 0.001)
   apodise(1,x)=wnospc(i)
   apodise(2,x)=avgreal(i)
+  apodise(3,x)=varreal(i)
 endfor
 
-newapodise=make_array(2,length)
-newapodise(0,*)=apodise(0,*)
-newapodise(1,*)=apodise(2,*)
+;remap mincoll and majcoll
+for i=0,n_elements(mincoll(0,*))-1 do begin
+  x=where(abs(apodise(0,*)-mincoll(1,i)) lt 0.001)
+  mincoll(0,i)=x
+endfor
+for i=0,n_elements(majcoll(0,*))-1 do begin
+  x=where(abs(apodise(0,*)-majcoll(1,i)) lt 0.001)
+  majcoll(0,i)=x
+endfor
+
+newapodise=make_array(3,length)
+newapodise(0,*)=apodise(0,*)  ;wavenumbers
+newapodise(1,*)=apodise(2,*)  ;radiances
+newapodise(2,*)=apodise(3,*)  ;variances
 
 ; now do apodisation
 ; a(-2)=0.0098, a(-1)=0.2385,0.5034,0.2385,0.0098

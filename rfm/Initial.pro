@@ -38,7 +38,7 @@ q=0 ; q is the index number for MAJOR
 loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
 
 ; set n: if n is less than nmax take n, otherwise take nmax.
-nmax=10
+nmax=15
 if (minpeakno(p) lt majpeakno(q)) eq 1 then begin
   if (minpeakno(p) lt nmax) then begin
     n=minpeakno(p) ; the number of peaks to take
@@ -90,7 +90,7 @@ fill, savename, p, q, n, w, r, minoryr, majoryr, mincoll, majcoll, contrast, con
 loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
 
 ; calculate average ratios and standard deviations for these ratios over different atmospheric conditions.
-ratiostat, unpratio, pratio, avgsim, stdsim, varsim, cov
+ratiostat, n, unpratio, pratio, avgsim, stdsim, varsim, cov
 
 ;row=0 ; which ratio?
 ;column=0

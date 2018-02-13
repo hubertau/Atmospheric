@@ -33,8 +33,8 @@ realvar=make_array(n,n)
 ; fill the arrays
 for z=0, n-1 do begin
   for y=0, n-1 do begin
-    realratio[z,y]=newapodise(1,mincoll[0,y]+27400)/newapodise(1,majcoll[0,z]+27400)
-    realvar[z,y]=varreal(mincoll[0,y])/number+varreal(majcoll[0,z])/number
+    realratio[z,y]=newapodise(1,mincoll[0,y])/newapodise(1,majcoll[0,z])
+    realvar[z,y]=newapodise(2,mincoll[0,y])/number+newapodise(2,majcoll[0,z])/number
 ;    totalrealerr[z,y]=sqrt((stdreal1(mincoll[0,y])/(newapodise(1,mincoll[0,y]+27400)*sqrt(number)))^2 + (stdreal1(majcoll[0,z])/(newapodise(1,majcoll[0,z]+27400)*sqrt(number)))^2)
   endfor
 endfor
@@ -81,6 +81,22 @@ err4=2*dp*d0*cov
 delta=20*(realratio-unpratio)/(pratio-unpratio)
 
 deltavar=err1+err2+err3+err4
+
+;#################################################################################################
+
+
+;#################################################################################################
+; display results
+
+deltastd=sqrt(deltavar)
+x=deltastd/delta
+width=n_elements(x(*,0))
+print, 'delta:'
+print, delta
+print, 'deltastd/delta:'
+print, x
+print, 'minimum relative error:'
+print, min(abs(x),I), '    indices:', I mod width +1, ' (column)', floor(I/width)+1, ' (row)'
 
 ;#################################################################################################
 

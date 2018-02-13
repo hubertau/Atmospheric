@@ -4,7 +4,7 @@ pro loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindi
 
 ; specify search directory to pass to filesearch script
 libdir = '/home/ball4321/MPhysProject/rfm/' + atm + '/'
-libdir = libdir + strtrim(altitude,2) + '/685970/'
+libdir = libdir + strtrim(altitude,2) + '/685end/'
 
 ; call filesearch script, which splits the major and minor isotopes
 @filesearch
