@@ -19,6 +19,6 @@ for i=0,4 do begin
   temp2[*,*,i]=unpratio[*,*,i]-avg[*,*,0]
 endfor
 
-cov=(1/5)*total(temp1*temp2,3)
+cov=total(temp1*temp2,3)/4
 
 end

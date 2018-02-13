@@ -70,7 +70,7 @@ err2=d0^2*varsim[*,*,0]
 err3=dp^2*varsim[*,*,1]
 
 ; term for perturbed-unperturbed covariance
-err4=dp*d0*cov
+err4=2*dp*d0*cov
 
 ;#################################################################################################
 
