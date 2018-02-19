@@ -14,7 +14,6 @@ unpratio=unpratio[*,*,0]
 
 ;pratio=mean(pratio,dimension=3)
 ;unpratio=mean(unpratio,dimension=3)
-
 ;#################################################################################################
 
 
@@ -85,7 +84,6 @@ for z=0, n-1 do begin
 ;    totalrealerr[z,y]=sqrt((stdreal1(mincoll[0,y])/(newapodise(1,mincoll[0,y]+27400)*sqrt(number)))^2 + (stdreal1(majcoll[0,z])/(newapodise(1,majcoll[0,z]+27400)*sqrt(number)))^2)
   endfor
 endfor
-
 ;#################################################################################################
 
 
@@ -100,7 +98,6 @@ d0=20*(realratio-pratio)/((pratio-unpratio)^2)
 
 ; derivative for perturbed ratios
 dp=20*(unpratio-realratio)/((pratio-unpratio)^2)
-
 ;#################################################################################################
 
 
@@ -118,7 +115,6 @@ err3=dp^2*varsim[*,*,1]
 
 ; term for perturbed-unperturbed covariance
 err4=2*dp*d0*cov
-
 ;#################################################################################################
 
 
@@ -128,7 +124,6 @@ err4=2*dp*d0*cov
 delta=20*(realratio-unpratio)/(pratio-unpratio)
 
 deltavar=err1+err2+err3+err4
-
 ;#################################################################################################
 
 
@@ -144,7 +139,6 @@ print, 'deltastd/delta:'
 print, x
 print, 'minimum relative error:'
 print, min(abs(x),I), '    indices:', I mod width +1, ' (column)', floor(I/width)+1, ' (row)'
-
 ;#################################################################################################
 
 
@@ -202,9 +196,7 @@ c=scatterplot(x3(s3(r1:r2)), y1(s3(r1:r2)), $
 convert, transpose(s1(0:6)), delta, result
 
 ;result(0,*) holds the major isotope number
-;result(1,*) holds the minor isotope number 
-
-
+;result(1,*) holds the minor isotope number
 ;#################################################################################################
 
 
