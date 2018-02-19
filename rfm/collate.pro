@@ -1,6 +1,18 @@
 pro collate, collated, peakno, index, peakindex, data, w, n
 ; COLLATE.PRO is to collect the peakfinding data into easy, visible matrices that
 ;   display the top n peaks that will be used to calculate ratios
+; 
+;   Inputs:
+;     peakno - number of peaks collected for each isotope
+;     index - indicates which isotope to examine
+;     peakindex - contains indices of peaks for all isotopes.
+;     data - contains the spectrum values for each isotope.
+;     w - contains wavenumbers
+;     n - how many peaks to return
+;
+;   Output:
+;     collated - a 3xn matrix containing a column of indices, a column of wavenumbers
+;                 and a column of spectral values.
 
 ;#################################################################################################
 ; First, use the data in peakno to determine the size of the collated array.
