@@ -178,7 +178,7 @@ s3=sort(x3)
 ;  /window
 ;  
 r1=0
-r2=6
+r2=50
 
 a=scatterplot(x1(s1(r1:r2)), y1(s1(r1:r2)), $
   xtitle='$\sigma^{2}_{total}$', $
