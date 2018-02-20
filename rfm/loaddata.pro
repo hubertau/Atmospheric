@@ -26,7 +26,7 @@ pro loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindi
 ;#################################################################################################
 ; specify search directory to pass to filesearch script
 libdir = '/home/ball4321/MPhysProject/rfm/' + atm + '/'
-libdir = libdir + strtrim(altitude,2) + '/685end/'
+libdir = libdir + strtrim(altitude,2) + '/685en2/'
 
 ; call filesearch script, which splits the major and minor isotopes
 @filesearch
@@ -67,10 +67,10 @@ endfor
 ;#################################################################################################
 ; finally, count the peaks using peakcount.pro
 
-threshold=[0.1,0.1,0.1,0.1]
+threshold=0.1*make_array(n_elements(majoryr[*,0]),1,/INTEGER,VALUE = 1)
 peakcount, majoryr, majpeakindices, majpeakno, majpeakindex, threshold
 
-threshold=[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
+threshold=0.1*make_array(n_elements(minoryr[*,0]),1,/INTEGER,VALUE = 1)
 peakcount, minoryr, minpeakindices, minpeakno, minpeakindex, threshold
 ;#################################################################################################
 
