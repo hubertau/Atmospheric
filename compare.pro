@@ -26,11 +26,15 @@
 !PATH = Expand_Path('/home/ball4321/MPhysProject/coyote') + ':' + !PATH
 cd, '/home/ball4321/MPhysProject'
 
-restore, 'rfm/ratioday30km' ; simulated data
-restore, 'jan04averaged'    ; measured data
 
-pratio=pratio[*,*,0]
-unpratio=unpratio[*,*,0]
+condition=['day','ngt','sum', 'win', 'equ']
+c='day'
+
+restore, 'rfm/ratioday30km' ; simulated data
+restore, 'jan04averaged' + c    ; measured data
+
+pratio=pratio[*,*,where(condition eq c)]
+unpratio=unpratio[*,*,where(condition eq c)]
 
 ;pratio=mean(pratio,dimension=3)
 ;unpratio=mean(unpratio,dimension=3)
@@ -63,14 +67,17 @@ for i=0,n_elements(wnospc)-1 do begin
   apodise(3,x)=varreal(i)
 endfor
 
+newmincoll=mincoll
+newmajcoll=majcoll
+
 ;remap mincoll and majcoll
-for i=0,n_elements(mincoll(0,*))-1 do begin
-  x=where(abs(apodise(0,*)-mincoll(1,i)) lt 0.001)
-  mincoll(0,i)=x
+for i=0,n_elements(newmincoll(0,*))-1 do begin
+  x=where(abs(apodise(0,*)-newmincoll(1,i)) lt 0.001)
+  newmincoll(0,i)=x
 endfor
 for i=0,n_elements(majcoll(0,*))-1 do begin
-  x=where(abs(apodise(0,*)-majcoll(1,i)) lt 0.001)
-  majcoll(0,i)=x
+  x=where(abs(apodise(0,*)-newmajcoll(1,i)) lt 0.001)
+  newmajcoll(0,i)=x
 endfor
 
 newapodise=make_array(3,length)
@@ -103,8 +110,8 @@ realvar=make_array(n,n)
 ; fill the arrays
 for z=0, n-1 do begin
   for y=0, n-1 do begin
-    realratio[z,y]=newapodise(1,mincoll[0,y])/newapodise(1,majcoll[0,z])
-    realvar[z,y]=newapodise(2,mincoll[0,y])/number+newapodise(2,majcoll[0,z])/number
+    realratio[z,y]=newapodise(1,newmincoll[0,y])/newapodise(1,newmajcoll[0,z])
+    realvar[z,y]=newapodise(2,newmincoll[0,y])/number+newapodise(2,newmajcoll[0,z])/number
   endfor
 endfor
 ;#################################################################################################
@@ -232,6 +239,10 @@ save, filename='comres', $
   deltavar, $
   x, $
   realratio, $
+  mincoll, $
+  majcoll, $
+  newmincoll, $
+  newmajcoll, $
   result
 
 delvar, y, z

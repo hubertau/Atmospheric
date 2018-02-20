@@ -83,9 +83,14 @@ for a=0,(n_elements(flist)-1) do begin
     ; structure MDS
     L1B_MDS, LUN, ISWEEP+8, SPH, MDS
     
-    IF (MDS.ALT LE 31 && MDS.ALT GE 29) && (MDS.LAT LE 50 && MDS.LAT GE 30) THEN BEGIN
+    ; use L1C_SZALST, inputting MDS structure, to calculate Solar Zenith Angle.
+    ; SZA<90 -> Day
+    ; SZA>90 -> Night
+    L1C_SZALST, MDS.MDS_TIME, MDS.LAT, MDS.LON, SZA, LST
+    
+    IF (MDS.ALT LE 31 && MDS.ALT GE 29) && (MDS.LAT LE 50 && MDS.LAT GE 30) && (SZA GT 90) THEN BEGIN
       ; Print tangent point information for spectrum
-      PRINT, 'b,Alt,Lat,Lon=', b, MDS.ALT, MDS.LAT, MDS.LON
+      PRINT, 'b,Alt,Lat,Lon,SZA=', b, MDS.ALT, MDS.LAT, MDS.LON, SZA
       INDICES[0,b-1+a*73]=a+1         ; store file index as fileindex+1, so that the where 
                                       ;   function later doesn't delete the flist[0] contributions
       INDICES[1,b-1+a*73]=b           ; b is scan number
@@ -150,7 +155,7 @@ varreal=variance(data,dimension=1)
 
 ;#################################################################################################
 ; save the data to pass to compare.pro
-save, flist, avgreal, stdreal, indices, data, wnospc, varreal, filename='jan04averaged'
+save, flist, avgreal, stdreal, indices, data, wnospc, varreal, filename='jan04averagedngt'
 ;#################################################################################################
 
 

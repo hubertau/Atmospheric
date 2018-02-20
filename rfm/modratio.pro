@@ -1,6 +1,7 @@
 cd, '/home/ball4321/MPhysProject/rfm'
-restore,'ratioday30km' ; get back mincoll and majcoll before apodisation changed indices
 restore,'../comres'
+restore,'ratioday30km' ; get back mincoll and majcoll before apodisation changed indices
+
 
 pratio=pratio[*,*,0]
 unpratio=unpratio[*,*,0]
@@ -43,23 +44,18 @@ mini=w(mincoll[0,result[1,*]])
 
 ;#########
 dirty=make_array(1,9)
-dirty(0:5)=mini(0:5)
-dirty(6:7)=mini(7:8)
-dirty(8)=mini(10)
+dirty=mini(where(result[0,*] eq 14))
 tempd=make_array(3,9)
-tempd(*,0:5)=temp(*,0:5)
-tempd(*,6:7)=temp(*,7:8)
-tempd(*,8)=temp(*,9)
+tempd=temp(*,where(result[0,*] eq 14))
   plot1=scatterplot(dirty,tempd(0,*), name='unperturbed ratios')
   plot2=scatterplot(dirty,tempd(1,*),/overplot, symbol='x', name='rfm without CO2(636)')
   plot3=scatterplot(dirty,tempd(2,*),symbol='plus',/overplot,$
     name='averaged MIPAS data at 30km', $
     xtitle='minor isotope line/cm$^{-1}$', $
     ytitle='ratio', $
-    title='ratios between major line at 1926.325cm$^{-1}$ and minor lines for ' + strmid(strtrim(major(q)),27,5) + ' and ' + strmid(strtrim(minor(p)),27,5))
+    title='ratios (taken in the night) between major line at 1926.325cm$^{-1}$ and minor lines for ' + strmid(strtrim(major(q)),27,5) + ' and ' + strmid(strtrim(minor(p)),27,5))
 
-  leg=LEGEND(TARGET=[plot1,plot2,plot3], POSITION=[1885,5], $
-    /DATA, /AUTO_TEXT_COLOR)
+  leg=LEGEND(TARGET=[plot1,plot2,plot3], POSITION=[1880,5.5],/DATA, /AUTO_TEXT_COLOR)
 
 
  
