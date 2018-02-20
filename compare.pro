@@ -1,6 +1,26 @@
-; compare real and simulated data
+; compare.pro is a script to compare the real and simulated data.
+; 
+; Last Edit 20/02/18
+; 
+; The first section loads the data and sets pratio and unpratio.
+; 
+; The second section apodises (smooths) the real, averaged data.
+; 
+; The third section calculates ratios and variances for the real data.
+; 
+; The fourth section calculates derivates of the delta estimate function for error calculation
+; 
+; The fifth section prepares the actual terms to be added
+; 
+; The six section calculates the total error
+; 
+; The seventh section displays the results in the console
+; 
+; The eighth section plots the results.
+;
 
 ;#################################################################################################
+; Section 1
 ; set the directory and load in simulated and real data
 
 !PATH = Expand_Path('/home/ball4321/MPhysProject/coyote') + ':' + !PATH
@@ -18,6 +38,7 @@ unpratio=unpratio[*,*,0]
 
 
 ;#################################################################################################
+; Section 2
 ; measured data errors
 
 ; set variable 'number' to divide the standard deviation through by.
@@ -72,6 +93,9 @@ endfor
 
 
 ;#################################################################################################
+; Section 3
+; Take the ratios of the real data, and its variance.
+
 ; create arrays to contain necessary data
 realratio=make_array(n,n)
 realvar=make_array(n,n)
@@ -87,6 +111,7 @@ endfor
 
 
 ;#################################################################################################
+; Section 4
 ; prepare derivatives for the delta variance calculation.
 
 ; derivative for measured ratios
@@ -101,6 +126,7 @@ dp=20*(unpratio-realratio)/((pratio-unpratio)^2)
 
 
 ;#################################################################################################
+; Section 5
 ; prepare terms for final addition
 
 ; term for measured variance
@@ -118,6 +144,7 @@ err4=2*dp*d0*cov
 
 
 ;#################################################################################################
+; Section 6
 ; calcalate estimate for delta, and its error
 
 delta=20*(realratio-unpratio)/(pratio-unpratio)
@@ -127,6 +154,7 @@ deltavar=err1+err2+err3+err4
 
 
 ;#################################################################################################
+; Section 7
 ; display results
 
 deltastd=sqrt(deltavar)
@@ -142,6 +170,7 @@ print, min(abs(x),I), '    indices:', I mod width +1, ' (column)', floor(I/width
 
 
 ;#################################################################################################
+; Section 8
 ; plotting delta against the errors
 
 x1=reform(deltavar,1,n_elements(deltavar))
