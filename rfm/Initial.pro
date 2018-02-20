@@ -35,7 +35,7 @@ atm=condition[c]      ; specify the atmospheric conditions of the data
 altitude=30000        ; specify the altitude at which to consider data
 savename=altitude     ; useful later if saving is enabled
 
-p=8 ; p is the index number for MINOR
+p=2 ; p is the index number for MINOR
 q=1 ; q is the index number for MAJOR
 
 ;#################################################################################################
@@ -141,6 +141,10 @@ ratiostat, n, unpratio, pratio, avgsim, stdsim, varsim, cov
 name='ratioday30km'
 save, filename=name, $
   n, $
+  major, $
+  minor, $
+  p, $
+  q, $
   mincoll, $
   majcoll, $
   minoryr, $

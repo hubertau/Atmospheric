@@ -221,12 +221,18 @@ c=scatterplot(x3(s3(r1:r2)), y1(s3(r1:r2)), $
   /current, layout=[1,3,3])
 
 ;convert changes the indices back into column/row to access the major and minor isotope lines used
-convert, transpose(s1(0:6)), delta, result
+convert, transpose(s1(0:20)), delta, result
 
 ;result(0,*) holds the major isotope number
 ;result(1,*) holds the minor isotope number
 ;#################################################################################################
 
+save, filename='comres', $
+  delta, $
+  deltavar, $
+  x, $
+  realratio, $
+  result
 
 delvar, y, z
 

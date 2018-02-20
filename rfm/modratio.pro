@@ -1,4 +1,16 @@
-mratio=make_array(15,15)
+cd, '/home/ball4321/MPhysProject/rfm'
+restore,'ratioday30km' ; get back mincoll and majcoll before apodisation changed indices
+restore,'../comres'
+
+pratio=pratio[*,*,0]
+unpratio=unpratio[*,*,0]
+
+name=strupcase(strmid(strtrim(major(q)),27,3))+'(-'+strmid(strtrim(minor(p)),31,1)+')'
+name='mod/'+name+'/rad_30000.asc'
+
+rfmrd,name,w,rtemp
+
+mratio=make_array(n,n)
 
 for z=0, n-1 do begin
   for y=0, n-1 do begin
@@ -6,15 +18,49 @@ for z=0, n-1 do begin
   endfor
 endfor
 
-end
+; plot the ratios
 
-plot1=scatterplot(w(mincoll(0,*)),temp(0,*), name='unperturbed ratios')
-plot2=scatterplot(w(mincoll(0,*)),temp(1,*),/overplot, symbol='x', name='rfm without CO2(636)')
-plot3=scatterplot(w(mincoll(0,*)),temp(2,*),symbol='plus',/overplot,$
-  name='averaged MIPAS data at 30km', $
-  xtitle='minor isotope line', $
-  ytitle='ratio', $
-  title='ratios between major line 15 (1926.325 cm^-1) and minor lines for CO2 isotopes 626 and 636')
+temp=make_array(3,n_elements(result[0,*]))
+temp[0,*]=unpratio(result[0,*],result[1,*])
+temp[1,*]=mratio(result[0,*],result[1,*])
+temp[2,*]=realratio(result[0,*],result[1,*])
 
-leg=LEGEND(TARGET=[plot1,plot2,plot3], POSITION=[1800,5.7], $
+maji=w(majcoll[0,result[0,*]])
+mini=w(mincoll[0,result[1,*]])
+
+;plot1=scatterplot3d(mini,maji,temp(0,*), name='unperturbed ratios')
+;plot2=scatterplot3d(mini,maji,temp(1,*),/overplot, symbol='x', name='rfm without CO2(636)')
+;plot3=scatterplot3d(mini,maji,temp(2,*),symbol='plus',/overplot,$
+;  name='averaged MIPAS data at 30km', $
+;  xtitle='minor isotope line', $
+;  ytitle='major isotope line', $
+;  ztitle='ratio', $
+;  title='ratios between major lines and minor lines for ' + strmid(strtrim(major(q)),27,5) + ' and ' + strmid(strtrim(minor(p)),27,5))
+;
+;leg=LEGEND(TARGET=[plot1,plot2,plot3], POSITION=[1800,1800,5.7], $
+;    /DATA, /AUTO_TEXT_COLOR)
+
+
+;#########
+dirty=make_array(1,9)
+dirty(0:5)=mini(0:5)
+dirty(6:7)=mini(7:8)
+dirty(8)=mini(10)
+tempd=make_array(3,9)
+tempd(*,0:5)=temp(*,0:5)
+tempd(*,6:7)=temp(*,7:8)
+tempd(*,8)=temp(*,9)
+  plot1=scatterplot(dirty,tempd(0,*), name='unperturbed ratios')
+  plot2=scatterplot(dirty,tempd(1,*),/overplot, symbol='x', name='rfm without CO2(636)')
+  plot3=scatterplot(dirty,tempd(2,*),symbol='plus',/overplot,$
+    name='averaged MIPAS data at 30km', $
+    xtitle='minor isotope line/cm$^{-1}$', $
+    ytitle='ratio', $
+    title='ratios between major line at 1926.325cm$^{-1}$ and minor lines for ' + strmid(strtrim(major(q)),27,5) + ' and ' + strmid(strtrim(minor(p)),27,5))
+
+  leg=LEGEND(TARGET=[plot1,plot2,plot3], POSITION=[1885,5], $
     /DATA, /AUTO_TEXT_COLOR)
+
+
+ 
+end
