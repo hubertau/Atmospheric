@@ -1,4 +1,7 @@
-pro loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
+;pro loaddata, atm, altitude, w, r, majoryr, minoryr, majpeakindices, minpeakindices, majpeakno, minpeakno, majpeakindex, minpeakindex, major, minor
+pro loaddata, atm, altitude, unp, maj, min
+
+
 ; LOADDATA.PRO takes the (a) atmospheric condition and
 ;   (b) altitude and extracts all the relevant data for all gases available.
 ;
@@ -30,6 +33,10 @@ libdir = libdir + strtrim(altitude,2) + '/685en2/'
 
 ; call filesearch script, which splits the major and minor isotopes
 @filesearch
+
+unp=create_struct('f',main)
+maj=create_struct('f',major)
+min=create_struct('f',minor)
 ;#################################################################################################
 
 
@@ -40,38 +47,47 @@ libdir = libdir + strtrim(altitude,2) + '/685en2/'
 ; use rfmrd procedure to read the unperturbed spectrum
 rfmrd,main,w,r
 
-; create an array to store the results of the reads (major isotopologues)
-majoryr=make_array(n_elements(major),n_elements(r),/double)
+unp=create_struct(unp,'w',w)
 
-for a=0,(n_elements(major)-1) do begin
-  rfmrd,major[a],w,k
+foreach a, maj.f do begin
+;  rfmrd,major[a],w,k
+  rfmrd, a, w, k
   
-  ; divide by the unpertubed spectrum
-  majoryr[a,*]=k/r
-endfor
+  ; divide by the unperturbed spectrum
+;  majoryr[a,*]=k/r
+  getname,a,temp
+  maj=create_struct(maj,temp,k/r)
+
+endforeach
 
 
 
 ; create an array to store the results of the reads (minor isotopologues)
 minoryr=make_array(n_elements(minor),n_elements(r),/double)
 
-for a=0,(n_elements(minor)-1) do begin
-  rfmrd,minor[a],w,k
+foreach a, min.f do begin
+
+  rfmrd, a, w, k
   
-  ; divide by the unpertubed spectrum
-  minoryr[a,*]=k/r
-endfor
+  ; divide by the unperturbed spectrum
+  getname,a,temp
+  min=create_struct(min,temp,k/r)
+
+endforeach
 ;#################################################################################################
 
 
 ;#################################################################################################
 ; finally, count the peaks using peakcount.pro
 
-threshold=0.1*make_array(n_elements(majoryr[*,0]),1,/INTEGER,VALUE = 1)
-peakcount, majoryr, majpeakindices, majpeakno, majpeakindex, threshold
+;threshold=0.1*make_array(n_elements(majoryr[*,0]),1,/INTEGER,VALUE = 1)
+;peakcount, majoryr, majpeakindices, majpeakno, majpeakindex, threshold
+threshold=0.1
+peakcount, maj, threshold
 
-threshold=0.1*make_array(n_elements(minoryr[*,0]),1,/INTEGER,VALUE = 1)
-peakcount, minoryr, minpeakindices, minpeakno, minpeakindex, threshold
+;threshold=0.1*make_array(n_elements(minoryr[*,0]),1,/INTEGER,VALUE = 1)
+threshold=0.1
+peakcount, min, threshold
 ;#################################################################################################
 
 
