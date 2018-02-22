@@ -1,4 +1,4 @@
-pro loaddata, atm, altitude, unp, maj, min
+pro loaddata, con, condc, unp, maj, min
 ; LOADDATA.PRO takes the (a) atmospheric condition and
 ;   (b) altitude and extracts all the relevant data for all gases available.
 ;
@@ -16,6 +16,10 @@ pro loaddata, atm, altitude, unp, maj, min
 ;   min - minor isotopic data
 
 ;#################################################################################################
+
+altitude=con.altitude
+atm=con.condition(where(con.condition eq condc))
+
 ; specify search directory to pass to filesearch script
 libdir = '/home/ball4321/MPhysProject/rfm/' + atm + '/'
 libdir = libdir + strtrim(altitude,2) + '/685en2/'
@@ -37,7 +41,7 @@ min=create_struct('f',minor)
 rfmrd,main,w,r
 
 ; store the result in unp struct
-unp=create_struct(unp,'w',w)
+unp=create_struct(unp,'w',w,'r',r)
 
 foreach a, maj.f do begin
 ;  rfmrd,major[a],w,k
@@ -64,10 +68,10 @@ endforeach
 ;#################################################################################################
 ; finally, count the peaks using peakcount.pro
 
-threshold=0.1
+threshold=0.05
 peakcount, maj, threshold
 
-threshold=0.1
+threshold=0.05
 peakcount, min, threshold
 ;#################################################################################################
 

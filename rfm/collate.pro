@@ -1,18 +1,24 @@
-pro collate, collated, peakno, index, peakindex, data, w, n
+pro collate, collated, input, index, unp, n
 ; COLLATE.PRO is to collect the peakfinding data into easy, visible matrices that
 ;   display the top n peaks that will be used to calculate ratios
 ; 
 ;   Inputs:
-;     peakno - number of peaks collected for each isotope
-;     index - indicates which isotope to examine
-;     peakindex - contains indices of peaks for all isotopes.
-;     data - contains the spectrum values for each isotope.
-;     w - contains wavenumbers
-;     n - how many peaks to return
+;     input - input struct
+;     index - which isotope?
+;     unp - for the wavenumber data
+;     n - size of ratio matrix to be taken.
 ;
 ;   Output:
 ;     collated - a 3xn matrix containing a column of indices, a column of wavenumbers
 ;                 and a column of spectral values.
+
+;#################################################################################################
+;prepare data from structures
+
+getname, input.f(index), tag
+gettagname, input, tag+'IDX', tag1
+
+peakindex=input.(tag1)
 
 ;#################################################################################################
 ; First, use the data in peakno to determine the size of the collated array.
@@ -21,10 +27,13 @@ pro collate, collated, peakno, index, peakindex, data, w, n
 ; and also the minoryr/majoryr values for the data. This is useful for visual verifiation the
 ;   sorting has worked
 ; column 1: indices of peaks, column 2: corresponding wavenumbers, column 3: corresponding peak (radiance) values
-collated=make_array(3,peakno(index))
-collated[0,*]=peakindex[index,0:peakno(index)-1]
-collated[1,*]=w(collated[0,*])
-collated[2,*]=data(index,collated[0,*])
+collated=make_array(3,n_elements(peakindex))
+collated[0,*]=peakindex
+collated[1,*]=unp.w(collated[0,*])
+
+getname, input.f(index), tag
+gettagname, input, tag, tag1
+collated[2,*]=input.(tag1)(collated[0,*])
 ;#################################################################################################
 
 

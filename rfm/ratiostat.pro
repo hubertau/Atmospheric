@@ -1,4 +1,4 @@
-pro ratiostat, n, unpratio, pratio, avg, std, var, cov
+pro ratiostat, n, rat
 ; RATIOSTAT.PRO is a short script to calculate the variance and covariance of the unperturbed
 ;   and perturbed ratios.
 ; 
@@ -16,14 +16,11 @@ pro ratiostat, n, unpratio, pratio, avg, std, var, cov
 
 ;#################################################################################################
 ; fill in avg, std, and var
-avg[*,*,0]=mean(unpratio,dimension=3)
-avg[*,*,1]=mean(pratio,dimension=3)
+rat.avg[*,*,0]=mean(rat.unp,dimension=3)
+rat.avg[*,*,1]=mean(rat.p,dimension=3)
 
-std[*,*,0]=stddev(unpratio,dimension=3)
-std[*,*,1]=stddev(pratio,dimension=3)
-
-var[*,*,0]=variance(unpratio,dimension=3)
-var[*,*,1]=variance(pratio,dimension=3)
+rat.var[*,*,0]=variance(rat.unp,dimension=3)
+rat.var[*,*,1]=variance(rat.p,dimension=3)
 ;#################################################################################################
 
 
@@ -33,12 +30,12 @@ temp1=make_array(n,n,5)
 temp2=make_array(n,n,5)
 
 for i=0,4 do begin
-  temp1[*,*,i]=pratio[*,*,i]-avg[*,*,1]
-  temp2[*,*,i]=unpratio[*,*,i]-avg[*,*,0]
+  temp1[*,*,i]=rat.p[*,*,i]-rat.avg[*,*,1]
+  temp2[*,*,i]=rat.unp[*,*,i]-rat.avg[*,*,0]
 endfor
 
 ; divide by n-1 atmospheric conditions for SAMPLE variance.
-cov=total(temp1*temp2,3)/4
+rat=create_struct(rat,'cov',total(temp1*temp2,3)/4)
 ;#################################################################################################
 
 

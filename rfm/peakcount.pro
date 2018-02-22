@@ -30,11 +30,13 @@ foreach a, input.f do begin
   ; the foreach loop that goes along all the isotopic files.
   peakindices=make_array(2,n_elements(input.(tindex)))
   
+  ; create peakindex
+  peakindex=make_array(n_elements(input.(tindex)))
+  
   ; create the relevant tags in the struct. Each gas has two extra tags, along with the data:
   ; (a) peak indices, in e.g. 'CO2I1IDX' and
   ; (b) the number of peaks, in e.g. 'CO2I1NO'
-  input=create_struct(input, $
-    name+'idx',make_array(n_elements(input.(tindex))),$
+  input=create_struct(input,$
     name+'no',0)
   
   ; initialise peakcounter at 0. This will be off (0) whenever a peak is not being counted, and
@@ -71,8 +73,7 @@ foreach a, input.f do begin
         ; Therefore, add on the index value of the start peak value. A quick conceptual check:
         ; if I is 0, i.e. the peak consists just of one point, then nothing will be added to
         ; the peakindex matrix entry in the struct. That is correct.
-        gettagname, input, name+'idx', idx
-        input.(idx)(index)=I+peakindices[0,input.(no)]
+        peakindex(input.(no))=I+peakindices[0,input.(no)]
 
         ; Now that the processing is complete for this particular peak, turn off peak counting
         ; variable.
@@ -84,6 +85,7 @@ foreach a, input.f do begin
       endif
     endelse
   endforeach
+  input=create_struct(input, name+'IDX',peakindex(0:input.(no)-1))
 endforeach
 ;#################################################################################################
 

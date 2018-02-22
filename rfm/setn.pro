@@ -3,18 +3,23 @@ pro setn, n, nmax, min, maj, p, q
 ; 
 ; Inputs:
 ;   nmax - maximum size to return
-;   mininput - array for minor isotope under consideration
-;   majinput - array for major isotope 
+;   min - min struct
+;   maj - maj struct
+;   p - minor isotopic index
+;   q - major isotopic index
 ;
 ; Output:
 ;   n - size of matrix to contain ratio calculations
 
+;#################################################################################################
+; set up correct tags to pass to next section
 getname, maj.f(q), majgas
 gettagname, maj, majgas+'no', majtag
 
 
 getname, min.f(p), mingas
 gettagname, min, mingas+'no', mintag
+;#################################################################################################
 
 
 ;#################################################################################################
