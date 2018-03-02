@@ -1,3 +1,6 @@
+; script to compare ratios between specific lines in unperturbed, rfm without a specific isotpe, and
+; averaged MPIAS data.
+
 cd, '/home/ball4321/MPhysProject/rfm'
 restore,'../comres'
 restore,'ratioday30km' ; get back mincoll and majcoll before apodisation changed indices
@@ -55,7 +58,7 @@ tempd=temp(*,where(result[0,*] eq 14))
     ytitle='ratio', $
     title='ratios (taken in the night) between major line at 1926.325cm$^{-1}$ and minor lines for ' + strmid(strtrim(major(q)),27,5) + ' and ' + strmid(strtrim(minor(p)),27,5))
 
-  leg=LEGEND(TARGET=[plot1,plot2,plot3], POSITION=[1880,5.5],/DATA, /AUTO_TEXT_COLOR)
+  leg=LEGEND(TARGET=[plot1,plot2,plot3], POSITION=[1880,5.5],/DATA, /AUTO_TEXT_COLOR, sample_width=0)
 
 
  
