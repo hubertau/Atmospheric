@@ -53,7 +53,7 @@ p1=plot(unp.w(sw:fw),unp.r(sw:fw)/1000,$
   name='RFM unperturbed spectrum * 10$^{-3}$',$
   xtitle='Wavenumbers of isotopic lines/cm$^{-1}$',$
   ytitle='Radiance/nW/(cm$^{2}$ sr cm$^{-1}$)',$
-  title='CO2(626) Visualisation of RFM, MIPAS data, Jacobian, Jacobian/(RFM+1), and selected lines')
+  title=name2iso(gas) + ' Visualisation of RFM, MIPAS data, Jacobian, Jacobian/(RFM+1), and selected lines')
 
 ; plot jacobian spectrum
 p2=plot(unp.w(sw:fw),jac(sw:fw),$
