@@ -6,6 +6,7 @@ pro linevis, gas, unp, input, div, jac, no,$
 ;   line, with colour.
 ;   
 ;   Inputs:
+;     gas - string of gas name, e.g. 'co2i1'. Doens't matter if upper or lower case.
 ;     unp - for the wavenumber axis
 ;     input - this is either majcoll or mincoll
 ;     div - Jacobian/(RFM+1)
