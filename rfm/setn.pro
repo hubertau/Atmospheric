@@ -1,10 +1,10 @@
-pro setn, n, nmax, min, maj, p, q
+pro setn, n, nmax, mi, ma, p, q
 ; SETN.PRO is a short script to return the value of n to be used to set up ratio calculations
 ; 
 ; Inputs:
 ;   nmax - maximum size to return
-;   min - min struct
-;   maj - maj struct
+;   mi - min struct
+;   ma - maj struct
 ;   p - minor isotopic index
 ;   q - major isotopic index
 ;
@@ -13,12 +13,12 @@ pro setn, n, nmax, min, maj, p, q
 
 ;#################################################################################################
 ; set up correct tags to pass to next section
-getname, maj.f(q), majgas
-gettagname, maj, majgas+'no', majtag
+getname, ma.f(q), majgas
+gettagname, ma, majgas+'no', majtag
 
 
-getname, min.f(p), mingas
-gettagname, min, mingas+'no', mintag
+getname, mi.f(p), mingas
+gettagname, mi, mingas+'no', mintag
 ;#################################################################################################
 
 
@@ -26,12 +26,12 @@ gettagname, min, mingas+'no', mintag
 ; A simple set of conditionals
 
 ; if the number of minor isotope peaks is less than the number of major isotope peaks, continue
-if (min.(mintag) lt maj.(majtag)) eq 1 then begin
+if (mi.(mintag) lt ma.(majtag)) eq 1 then begin
 
   ; now if the number of peaks of the minor isotope is less than nmax, use that. Otherwise,
   ; use nmax.
-  if (min.(mintag) lt nmax) then begin
-    n=min.(mintag)
+  if (mi.(mintag) lt nmax) then begin
+    n=mi.(mintag)
   endif else begin
     n=nmax
   endelse
@@ -39,8 +39,8 @@ if (min.(mintag) lt maj.(majtag)) eq 1 then begin
   ; now if the number of major peaks is <= number of minor peaks, examine that in relation to nmax.
   ; If it's < nmax, use that. Otherwise, use nmax.
 endif else begin
-  if (maj.(majtag) lt nmax) then begin
-    n=maj.(majtag)
+  if (ma.(majtag) lt nmax) then begin
+    n=ma.(majtag)
   endif else begin
     n=nmax
   endelse
