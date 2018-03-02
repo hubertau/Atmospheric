@@ -10,13 +10,21 @@
 ; 
 ; The extracted data is stored in 'data', in m=number of spectra collected columns. Details about
 ;   each spectrum is stored in indices, which stores altitude, latitude, and longitude.
-; 
 
-; set up colour for plots
-;device,decomposed = 0
-;loadct, 39
-;!p.background=CGCOLOR('white')
-;!p.color=CGCOLOR('black')
+ 
+;#################################################################################################
+; options:
+
+; Latitude band
+lat=[30,50]
+
+; tangent height
+alt=[29,31]
+
+; day or ngt?
+tim='day'
+;#################################################################################################
+
 
 ;#################################################################################################
 ; set working and search directory. Also create relevant arrays to contain data to be read.
@@ -88,7 +96,10 @@ for a=0,(n_elements(flist)-1) do begin
     ; SZA>90 -> Night
     L1C_SZALST, MDS.MDS_TIME, MDS.LAT, MDS.LON, SZA, LST
     
-    IF (MDS.ALT LE 31 && MDS.ALT GE 29) && (MDS.LAT LE 50 && MDS.LAT GE 30) && (SZA GT 90) THEN BEGIN
+    IF ((MDS.ALT GE alt(0)) && (MDS.ALT LT alt(1))) && $
+      ((MDS.LAT GE lat(0)) && (MDS.LAT LT lat(1))) && $
+      (((SZA GT 90) && (tim eq 'ngt')) || ((SZA LE 90) && (tim eq 'day'))) THEN BEGIN
+
       ; Print tangent point information for spectrum
       PRINT, 'b,Alt,Lat,Lon,SZA=', b, MDS.ALT, MDS.LAT, MDS.LON, SZA
       INDICES[0,b-1+a*73]=a+1         ; store file index as fileindex+1, so that the where 
@@ -121,42 +132,27 @@ indices=indices(*,x)
 data=data[x,*]
 
 avgreal=mean(data,dimension=1)
-stdreal=STDDEV(data,dimension=1)
 varreal=variance(data,dimension=1)
 ;#################################################################################################
 
+
 ;#################################################################################################
-; Plot spectra
-; 
-;!P.MULTI=[0,1,2]
-;wnospc1=wnospc(0:11400)
-;avgreal1=avgreal(0:11400)
-;stdreal1=stdreal(0:11400)
-;PLOT, $
-; wnospc1, $
-; avgreal1, $
-; /ylog, $
-; XTITLE='Wavenumber, cm^-1', $
-; YTITLE='Radiance at 30km, $
-; nW/(cm2 sr cm-1)', $
-; TITLE='Averaged Radiance at 30km, 30-50 deg latitude'
-; 
-;PLOT, $
-; wnospc1, $
-; stdreal1, $
-; /ylog, $
-; XTITLE='Wavenumber, cm^-1', $
-; YTITLE='Radiance at 30km, $
-; nW/(cm2 sr cm-1)', $
-; TITLE='Standard Deviation of Average at 30km, 30-50 deg latitude'
-;write_png, 'avg30km', TVRD(/true)
+;store everything in structures
+dcon=create_struct(name='Data Options','LAT', lat, 'ALT', alt, 'TIM', tim, 'f', flist)
+
+ddat=create_struct(name='Data', 'w', wnospc, 'raw', data, 'label', indices, 'avg', avgreal, $
+   'var', varreal)
 ;#################################################################################################
 
 
 ;#################################################################################################
 ; save the data to pass to compare.pro
-save, flist, avgreal, stdreal, indices, data, wnospc, varreal, filename='jan04averagedngt'
+name=strmid(libdir,38,5)
+name='saves/'+name+tim
+save, filename=name, ddat, dcon
 ;#################################################################################################
 
+delvar, lat, alt, tim, flist, wnospc, data, indices, avgreal, varreal, lun, lst, libdir, l1bfil, $
+  name, SZA, WNORES, x, a, b, iscan, isweep
 
 end
